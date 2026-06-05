@@ -20,7 +20,7 @@ class EnrollmentController{
         }
     }
 
-    async showMyEnrollments(studentId){
+    async showMyApplications(studentId){
         try{
             const studentId = req.user.userId;
 
@@ -103,7 +103,7 @@ class EnrollmentController{
             const studentId = req.user.userId;
             const courseId = req.params.courseId;   
             
-            const cancel = enrollmentService(studentId, courseId);
+            const cancel = enrollmentService.cancelApplication(studentId, courseId);
             
             res.status(200).json({
                 message: "Application canceled.",
@@ -118,3 +118,5 @@ class EnrollmentController{
 
     }
 }
+
+module.exports = EnrollmentController();

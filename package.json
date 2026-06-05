@@ -1,0 +1,26 @@
+{
+  "name": "course-management-api",
+  "version": "1.0.0",
+  "description": "Course Management API is a restful backend application built with Node.js, Express.js, and MongoDB. It supports authentication, role-based access control, course management, and student enrollments using a layered architecture with routes, controllers, services, middlewares, and models.",
+  "homepage": "https://github.com/OltiRugova/course-management-api#readme",
+  "bugs": {
+    "url": "https://github.com/OltiRugova/course-management-api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OltiRugova/course-management-api.git"
+  },
+  "license": "ISC",
+  "author": "Olti Rugova",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.3"
+  }
+}

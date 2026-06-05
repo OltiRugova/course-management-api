@@ -2,30 +2,44 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 function authToken(req, res, next) {
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        return res.status(401).json({ message: "Token not provided" });
+        return res.status(401).json({
+            message: "Token not provided"
+        });
     }
 
     const token = authHeader.split(" ")[1];
 
     if (!token) {
-        return res.status(401).json({ message: "Token missing" });
+        return res.status(401).json({
+            message: "Token missing"
+        });
     }
 
     try {
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+        const decodedToken = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
 
         req.user = {
             userId: decodedToken.userId,
-            email: decodedToken.email,
+            username: decodedToken.username,
             role: decodedToken.role
         };
 
         next();
+
     } catch (err) {
-        return res.status(401).json({ message: "Invalid token" });
+
+        return res.status(401).json({
+            message: "Invalid token"
+        });
+
     }
 }
 
