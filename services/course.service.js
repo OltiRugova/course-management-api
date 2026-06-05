@@ -3,7 +3,7 @@ const Course = require("../models/course.model");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-class CousreService{
+class CourseService{
     async showCourses(professorId){
         const courses = await Course.find(professorId);
 
@@ -12,7 +12,7 @@ class CousreService{
         }
     }
 
-    async showCourse(professorId, courseId){
+    async showCourseById(professorId, courseId){
 
         const course = await Course.findById($and[{professorId}, {courseId}]);
 
@@ -29,8 +29,10 @@ class CousreService{
         return course;
     }
 
-    async createCourse(data){
-        const course = await Course.find(courseId);
+    async createCourse(data, profesorId){
+        const course = await Course.findOne(
+            $and[{profesor:profesorId}, {title:data.title}]
+        ); // potential err
 
         if (data.title !== undefined) {
             if (!data.title.trim()) {
@@ -54,8 +56,8 @@ class CousreService{
         return newCourse;
     }
 
-    async updateCourse(professorId, courseId, data) {
-        const course = await Course.find(courseId);
+    async updateCourse(professorId, data) {
+        const course = await Course.find(data.course);
 
         if(course == null){
             throw new Error("Course not found!");
@@ -81,7 +83,7 @@ class CousreService{
             updates.description = data.description;
         }
 
-        const updatedCourse = await Course.findByIdAndUpdate(
+        const updatedCourse = await Course.findOneAndUpdate(
             courseId,
             { $set: updates },
             { new: true }
@@ -109,4 +111,4 @@ class CousreService{
     }
 }
 
-module.exports = CousreService();
+module.exports = CourseService();
