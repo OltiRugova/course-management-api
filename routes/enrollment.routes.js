@@ -4,25 +4,25 @@ const router = express.Router();
 const enrollmentController = require("../controllers/enrollment.controller");
 
 const authMiddleware = require("../middlewares/auth.middleware");
-const authorizeRoles = require("../middlewares/authorizeRoles");
+const authorizeRoles = require("../middlewares/role.middleware");
 
 // professor routes
 router.get(
-    "/applications",
+    "/enrollments",
     authMiddleware,
     authorizeRoles("Professor"),
     enrollmentController.showApplications
 );
 
 router.patch(
-    "/applications/accept/:studentId",
+    "/enrollments/accept/:studentId",
     authMiddleware,
     authorizeRoles("Professor"),
     enrollmentController.acceptEnrollmentRequest
 );
 
 router.patch(
-    "/applicaions/cancel/:studentId",
+    "/enrollments/cancel/:studentId",
     authMiddleware,
     authorizeRoles("Professor"),
     enrollmentController.cancelEnrollmentRequest
@@ -30,21 +30,21 @@ router.patch(
 
 // student routes
 router.get(
-    "applicaions/my-applications",
+    "enrollments/my-applications",
     authMiddleware,
     authorizeRoles("Student"),
     enrollmentController.showMyApplications
 );
 
 router.post(
-    "/applications/apply/:courseId",
+    "/enrollments/apply/:courseId",
     authMiddleware,
     authorizeRoles("Student"),
     enrollmentController.applyForEnrollment
 );
 
 router.patch(
-    "/applications/cancel-application/:courseId",
+    "/enrollments/cancel-application/:courseId",
     authMiddleware,
     authorizeRoles("Student"),
     enrollmentController.cancelAppliaction

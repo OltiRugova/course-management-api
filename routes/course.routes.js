@@ -4,7 +4,7 @@ const router = express.Router();
 const courseController = require("../controllers/course.controller");
 
 const authMiddleware = require("../middlewares/auth.middleware");
-const authorizeRoles = require("../middlewares/authorizeRoles");
+const authorizeRoles = require("../middlewares/role.middleware");
 
 
 router.get(
@@ -18,7 +18,7 @@ router.get(
     "/courses/showById/:courseId",
     authMiddleware,
     authorizeRoles("Professor"),
-    courseController.showCoursesById
+    courseController.showCourseById
 )
 
 router.post(
@@ -41,3 +41,5 @@ router.delete(
     authorizeRoles("Professor"),
     courseController.deleteCourse
 )
+
+module.exports = router;
