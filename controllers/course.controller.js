@@ -24,7 +24,7 @@ class CourseController{
 
     }
 
-    async showCourseById(res,res){
+    async showCourseById(req,res){
         try{
             const profesorId = req.user.userId;
             const courseId = req.params.courseId;
@@ -103,4 +103,4 @@ class CourseController{
 
 }
 
-module.exports = CourseController();
+module.exports = new CourseController();
