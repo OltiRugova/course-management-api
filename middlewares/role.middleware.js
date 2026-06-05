@@ -11,3 +11,5 @@ function authorizeRoles(...allowedRoles) {
         next();
     };
 }
+
+module.exports = authorizeRoles;

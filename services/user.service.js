@@ -39,3 +39,5 @@ class UserService{
             return deletedUser;
         }
 }
+
+module.exports = new UserService();

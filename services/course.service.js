@@ -104,11 +104,11 @@ class CourseService{
             throw new Error("No delete authorization.");
         }
 
-        const course = await Course.findByIdAndDelete(courseId);
+        const deleteCourse = await Course.findByIdAndDelete(courseId);
 
 
         return { message: "Course deleted." };
     }
 }
 
-module.exports = CourseService();
+module.exports = new CourseService();

@@ -119,4 +119,4 @@ class EnrollmentController{
     }
 }
 
-module.exports = EnrollmentController();
+module.exports = new EnrollmentController();
