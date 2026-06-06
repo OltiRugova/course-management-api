@@ -20,7 +20,7 @@ class EnrollmentController{
         }
     }
 
-    async showMyApplications(studentId){
+    async showMyApplications(req, res){
         try{
             const studentId = req.user.userId;
 

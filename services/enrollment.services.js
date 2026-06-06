@@ -3,8 +3,6 @@ const Application = require("../models/application.model");
 const User = require("../models/user.model");
 const Course = require("../models/course.model");
 
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
@@ -30,7 +28,7 @@ class EnrollmentService{
     }
 
     // student access
-    async showMyEnrollments(studentId) {
+    async showMyApplications(studentId) {
         const applications = await Application.find({
             student: studentId
         })
@@ -46,7 +44,7 @@ class EnrollmentService{
 
     // professor access
     async acceptEnrollmentRequest(studentId, professorId) {
-        const student = await User.findById(studentId);
+        const student = await User.find({studentId});
 
         if (!student) {
             throw new Error("Student not found");
@@ -58,7 +56,7 @@ class EnrollmentService{
             match: { professor: professorId }
         });
 
-        if (application == null) {
+        if (!application) {
             throw new Error(
                 `No application found for student ${student.name} ${student.surname}`
             );
@@ -67,7 +65,7 @@ class EnrollmentService{
         const course = application.course;
 
         await Application.findByIdAndUpdate(application._id,{
-            status: "Accepted"
+            applicationStatus: "Accepted"
         });
 
         const enroll = await Enrollment.create({
@@ -83,7 +81,7 @@ class EnrollmentService{
         
     // professor access
     async cancelEnrollmentRequest(studentId, professorId){
-        const student = await User.findById(studentId);
+        const student = await User.find({student: studentId});
 
         if (student == null) {
             throw new Error("Student not found");
@@ -108,8 +106,8 @@ class EnrollmentService{
         const course = application.course;
 
         const updated = await Application.findByIdAndUpdate(
-            applicationId,
-            { status: "Denied" },
+            {application: applicationId},
+            { applicationStatus: "Denied" },
             { new: true }
         );
 
@@ -122,7 +120,7 @@ class EnrollmentService{
 
         const course = await Course.findById(courseId);
 
-        if (course == null) {
+        if (!course) {
             throw new Error("Course does not exist!");
         }
 
@@ -131,35 +129,24 @@ class EnrollmentService{
             course: courseId
         });
 
-        if (existingApplication == null) {
-            throw new Error("You don't h")
+        if (existingApplication) {
+
+            const statuses = {
+                Pending: "You already applied and it's pending",
+                Accepted: "You are already enrolled in this course",
+                Denied: "Your application was denied"
+            };
+
+            throw new Error(
+                statuses[existingApplication.applicationStatus] ||
+                "Application already exists"
+            );
         }
-
-        const statuses = [
-            {
-                state: "Pending",
-                err: "You already applied and it's pending"
-            },
-            {
-                state: "Accepted",
-                err: "You are already enrolled in this course"
-            },
-            {
-                state: "Denied",
-                err: "Your application was denied"
-            }
-        ];
-
-        statuses.forEach(status => {
-            if (existingApplication.status === status.state) {
-                throw new Error(status.err);
-            }
-        });
 
         const application = await Application.create({
             student: studentId,
             course: courseId,
-            status: "Pending"
+            applicationStatus: "Pending"
         });
 
         return application;
@@ -168,7 +155,7 @@ class EnrollmentService{
     // student access    
     async cancelApplication(studentId, courseId) {
 
-        const course = await Course.findById(courseId);
+        const course = await Course.find({courseId});
 
         if (course == null) {
             throw new Error("Course does not exist!");
@@ -179,26 +166,19 @@ class EnrollmentService{
             course: courseId
         });
 
-        if (application == null) {
-            throw new Error("You haven't applied for this course!");
+        if (application) {
+
+            const statuses = {
+                Accepted: "You are already enrolled in this course",
+                Denied: "Your application was denied"
+            };
+
+            throw new Error(
+                statuses[application.applicationStatus] ||
+                "Application already exists"
+            );
         }
-
-        const statuses = [
-            {
-                state: "Accepted",
-                err: "You are already enrolled in this course"
-            },
-            {
-                state: "Denied",
-                err: "Your application was denied"
-            }
-        ];
-
-        statuses.forEach(status => {
-            if (existingApplication.status === status.state) {
-                throw new Error(status.err);
-            }
-        });
+        
 
         await Application.deleteOne({
             student: studentId,
