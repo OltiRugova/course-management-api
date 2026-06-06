@@ -36,7 +36,7 @@ router.patch(
 )
 
 router.delete(
-    "/course/delete/:courseId",
+    "/delete/:courseId",
     authMiddleware,
     authorizeRoles("Professor"),
     courseController.deleteCourse
