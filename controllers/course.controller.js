@@ -1,106 +1,89 @@
 const courseService = require("../services/course.service");
 
-class CourseController{
+class CourseController {
 
-    async showCourses(req, res){
-        try{
+    async showCourses(req, res) {
+        try {
             const profesorId = req.user.userId;
 
-            const courses = courseService.showCourses(profesorId);
+            const courses = await courseService.showCourses(profesorId);
 
             res.status(200).json({
                 message: "Courses retrieved successfully.",
                 courses
             });
-        }catch(err){
 
-            res.status(400).json({
-                message: err.message
-            });
-
+        } catch (err) {
+            res.status(400).json({ message: err.message });
         }
-
-
-
     }
 
-    async showCourseById(req,res){
-        try{
+    async showCourseById(req, res) {
+        try {
             const profesorId = req.user.userId;
             const courseId = req.params.courseId;
 
-            const course = courseService.showCourseById(profesorId, courseId);
+            const course = await courseService.showCourseById(profesorId, courseId);
 
             res.status(200).json({
                 message: "Course retrieved successfully.",
                 course
             });
 
-        }catch(err){
-                res.status(400).json({
-                message: err.message
-            });
+        } catch (err) {
+            res.status(400).json({ message: err.message });
         }
     }
 
-    async createCourse(req, res){
-        try{
+    async createCourse(req, res) {
+        try {
             const data = req.body;
-            const profesorId = res.user.userId;
+            const profesorId = req.user.userId;
 
-            const newCourse = courseService.createCourse(data);
+            const newCourse = await courseService.createCourse(data, profesorId);
 
-            res.status(200).json({
+            res.status(201).json({
                 message: "Course created successfully!",
                 newCourse
             });
 
-
-
-        }catch(err){
-            res.status(400).json({
-                message: err.message
-            });
+        } catch (err) {
+            res.status(400).json({ message: err.message });
         }
     }
 
-    async updateCourse(req, res){
-        try{
-            const profesorIdId = req.user.userId;
+    async updateCourse(req, res) {
+        try {
+            const professorId = req.user.userId;
             const data = req.body;
 
-            const updatedCourse = courseService.updateCourse(professorId, data);
+            const updatedCourse = await courseService.updateCourse(professorId, data);
 
             res.status(200).json({
-                message: "User updated successfully!",
+                message: "Course updated successfully!",
                 updatedCourse
             });
-        }catch(err){
-            res.status(400).json({
-                message: err.message
-            });
+
+        } catch (err) {
+            res.status(400).json({ message: err.message });
         }
     }
 
-    async deleteCourse(req,res){
-        try{
-            const professorId = req.user.usrId;
+    async deleteCourse(req, res) {
+        try {
+            const professorId = req.user.userId;
             const courseId = req.params.id;
 
-            const deleteCourse = courseService.deleteCourse(professorId, courseId);
+            await courseService.deleteCourse(professorId, courseId);
 
             res.status(200).json({
                 message: "Course deleted successfully!"
             });
 
-        }catch(err){
-            res.status(400).json({
-                message: err.message
-            });
+        } catch (err) {
+            res.status(400).json({ message: err.message });
         }
-
     }
-
 }
 
 module.exports = new CourseController();

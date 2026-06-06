@@ -8,21 +8,21 @@ const authorizeRoles = require("../middlewares/role.middleware");
 
 // professor routes
 router.get(
-    "/enrollments",
+    "/showApplications",
     authMiddleware,
     authorizeRoles("Professor"),
     enrollmentController.showApplications
 );
 
 router.patch(
-    "/enrollments/accept/:studentId",
+    "/accept/:studentId",
     authMiddleware,
     authorizeRoles("Professor"),
     enrollmentController.acceptEnrollmentRequest
 );
 
 router.patch(
-    "/enrollments/cancel/:studentId",
+    "/cancel/:studentId",
     authMiddleware,
     authorizeRoles("Professor"),
     enrollmentController.cancelEnrollmentRequest
@@ -37,14 +37,14 @@ router.get(
 );
 
 router.post(
-    "/enrollments/apply/:courseId",
+    "/apply/:courseId",
     authMiddleware,
     authorizeRoles("Student"),
     enrollmentController.applyForEnrollment
 );
 
 router.patch(
-    "/enrollments/cancel-application/:courseId",
+    "/cancel-application/:courseId",
     authMiddleware,
     authorizeRoles("Student"),
     enrollmentController.cancelAppliaction

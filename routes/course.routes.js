@@ -8,28 +8,28 @@ const authorizeRoles = require("../middlewares/role.middleware");
 
 
 router.get(
-    "/courses/showAll",
+    "/showAll",
     authMiddleware,
     authorizeRoles("Professor"),
     courseController.showCourses
 )
 
 router.get(
-    "/courses/showById/:courseId",
+    "/showById/:courseId",
     authMiddleware,
     authorizeRoles("Professor"),
     courseController.showCourseById
 )
 
 router.post(
-    "/courses/create",
+    "/create",
     authMiddleware,
     authorizeRoles("Professor"),
     courseController.createCourse
 )
 
 router.patch(
-    "/courses/update/:courseId",
+    "/update/:courseId",
     authMiddleware,
     authorizeRoles("Professor"),
     courseController.updateCourse

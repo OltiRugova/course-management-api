@@ -5,16 +5,18 @@ require("dotenv").config();
 
 class CourseService{
     async showCourses(professorId){
-        const courses = await Course.find(professorId);
+        const courses = await Course.find({professor: professorId});
 
-        if(courses == null){
+        if(courses.length === null){
             throw new Error("You have no courses!");
         }
+
+        return courses;
     }
 
     async showCourseById(professorId, courseId){
 
-        const course = await Course.findById($and[{professorId}, {courseId}]);
+        const course = await Course.find($and[{professor: professorId}, {course: courseId}]);
 
         if(course._id != courseId){
             throw new Error("No course with id" . courseId);
@@ -29,41 +31,37 @@ class CourseService{
         return course;
     }
 
-    async createCourse(data, profesorId){
-        const course = await Course.findOne(
-            $and[{profesor:profesorId}, {title:data.title}]
-        ); // potential err
-
-        if (data.title !== undefined) {
-            if (!data.title.trim()) {
-                throw new Error("Title cannot be empty");
-            }
-            updates.title = data.title;
+    async createCourse(data, professorId) {
+        if (!data.title || !data.title.trim() || !data.description || !data.description.trim()) {
+            throw new Error("Title and Description are required and cannot be empty!");
         }
 
-        if (data.description !== undefined) {
-            if (!data.description.trim()) {
-                throw new Error("Description cannot be empty");
-            }
-            updates.description = data.description;
-        }             
+        const existingCourse = await Course.findOne({
+            professor: professorId,
+            title: data.title.trim()
+        });
 
-        if(data.title.empty() || data.description.empty()){
-            throw new Error("Title and Description are required!");
+        if (existingCourse) {
+            throw new Error("You have already created a course with this title.");
         }
-        const newCourse = await Course.create(data);
+
+        const newCourse = await Course.create({
+            title: data.title.trim(),
+            description: data.description.trim(),
+            professor: professorId
+        });
 
         return newCourse;
     }
 
-    async updateCourse(professorId, data) {
-        const course = await Course.find(data.course);
+    async updateCourse(professorId, courseId, data) { 
+        const course = await Course.findById(courseId);
 
-        if(course == null){
+        if (!course) {
             throw new Error("Course not found!");
         }
 
-        if(course.profesor != professorId){
+        if (course.profesor.toString() !== professorId.toString()) {
             throw new Error("No update authorization.");
         }
 
@@ -73,22 +71,22 @@ class CourseService{
             if (!data.title.trim()) {
                 throw new Error("Title cannot be empty");
             }
-            updates.title = data.title;
+            updates.title = data.title.trim();
         }
 
         if (data.description !== undefined) {
             if (!data.description.trim()) {
                 throw new Error("Description cannot be empty");
             }
-            updates.description = data.description;
+            updates.description = data.description.trim();
         }
 
+
         const updatedCourse = await Course.findOneAndUpdate(
-            courseId,
+            { _id: courseId },
             { $set: updates },
             { new: true }
         );
-
 
         return updatedCourse;
     }
