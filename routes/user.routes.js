@@ -6,13 +6,13 @@ const userController = require("../controllers/user.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 
 router.patch(
-    "/user/update",
+    "/update",
     authMiddleware,
     userController.updateCurrentUser
 )
 
 router.delete(
-    "/user/delete",
+    "/delete",
     authMiddleware,
     userController.deleteCurrentUser
 )
