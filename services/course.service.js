@@ -61,7 +61,7 @@ class CourseService{
             throw new Error("Course not found!");
         }
 
-        if (course.profesor.toString() !== professorId.toString()) {
+        if (course.professor != professorId) {
             throw new Error("No update authorization.");
         }
 
@@ -92,13 +92,13 @@ class CourseService{
     }
 
     async deleteCourse(professorId, courseId){
-        const course = await Course.find(courseId);
+        const course = await Course.findById(courseId);
 
         if(course == null){
             throw new Error("Course not found!");
         }
 
-        if(course.profesor != professorId){
+        if(course.professor != professorId){
             throw new Error("No delete authorization.");
         }
 

@@ -55,9 +55,14 @@ class CourseController {
     async updateCourse(req, res) {
         try {
             const professorId = req.user.userId;
+            const courseId = req.params.courseId;
             const data = req.body;
 
-            const updatedCourse = await courseService.updateCourse(professorId, data);
+            const role = req.user.role;
+
+            console.log(role);
+
+            const updatedCourse = await courseService.updateCourse(professorId, courseId,data);
 
             res.status(200).json({
                 message: "Course updated successfully!",
@@ -72,7 +77,7 @@ class CourseController {
     async deleteCourse(req, res) {
         try {
             const professorId = req.user.userId;
-            const courseId = req.params.id;
+            const courseId = req.params.courseId;
 
             await courseService.deleteCourse(professorId, courseId);
 
