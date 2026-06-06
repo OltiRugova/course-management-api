@@ -5,7 +5,7 @@ class EnrollmentController{
         try{
             const profesorId = req.user.userId;
 
-            const applicatons = enrollmentService.showApplications(profesorId);
+            const applicatons = await enrollmentService.showApplications(profesorId);
 
             res.status(200).json({
                 message: "Applications retrieved successfully.",
@@ -24,7 +24,7 @@ class EnrollmentController{
         try{
             const studentId = req.user.userId;
 
-            const applicatons = enrollmentService.showMyApplications(studentId);
+            const applicatons = await enrollmentService.showMyApplications(studentId);
 
             res.status(200).json({
                 message: "Applications retrieved successfully.",
@@ -45,7 +45,7 @@ class EnrollmentController{
             const studentId = req.params.studentId;
             const professorId = req.user.userId;
 
-            const accepted = enrollmentService.acceptEnrollmentRequest(studentId, professorId); 
+            const accepted = await enrollmentService.acceptEnrollmentRequest(studentId, professorId); 
 
             res.status(200).json({
                 message: "Enrollment accepted.",
@@ -64,7 +64,7 @@ class EnrollmentController{
             const studentId = req.params.studentId;
             const professorId = req.user.userId;
 
-            const canceled = enrollmentService.cancelEnrollmentRequest(studentId, professorId); 
+            const canceled = await enrollmentService.cancelEnrollmentRequest(studentId, professorId); 
 
             res.status(200).json({
                 message: "Enrollment canceled.",
@@ -83,7 +83,7 @@ class EnrollmentController{
             const studentId = req.user.userId;
             const courseId = req.params.courseId;
 
-            const apply = enrollmentService.applyForEnrollment(studentId, courseId);
+            const apply = await enrollmentService.applyForEnrollment(studentId, courseId);
 
             res.status(200).json({
                 message: "Applied successfully.",
@@ -103,7 +103,7 @@ class EnrollmentController{
             const studentId = req.user.userId;
             const courseId = req.params.courseId;   
             
-            const cancel = enrollmentService.cancelApplication(studentId, courseId);
+            const cancel = await enrollmentService.cancelApplication(studentId, courseId);
             
             res.status(200).json({
                 message: "Application canceled.",
