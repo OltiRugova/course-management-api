@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 function authorizeRoles(...allowedRoles) {
     return (req, res, next) => {
         if (!req.user) {
