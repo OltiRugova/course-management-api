@@ -30,23 +30,23 @@ router.patch(
 
 // student routes
 router.get(
-    "enrollments/my-applications",
+    "/my-applications",
     authMiddleware,
-    authorizeRoles("Student"),
+    authorizeRoles("student"),
     enrollmentController.showMyApplications
 );
 
 router.post(
     "/apply/:courseId",
     authMiddleware,
-    authorizeRoles("Student"),
+    authorizeRoles("student"),
     enrollmentController.applyForEnrollment
 );
 
 router.patch(
     "/cancel-application/:courseId",
     authMiddleware,
-    authorizeRoles("Student"),
+    authorizeRoles("student"),
     enrollmentController.cancelAppliaction
 );
 
